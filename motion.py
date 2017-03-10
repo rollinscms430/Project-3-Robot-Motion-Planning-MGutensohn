@@ -141,9 +141,7 @@ def main():
         
         queue_item = queue.get()
         state = queue_item[1]
-        #print 'here',queue_item[0]
         
-        #print_grid(state.grid)
 
         if state.done():
             print_grid(state.grid)
@@ -159,7 +157,8 @@ def main():
             if previously_visited(new_state, visited):
                 continue
             queue.put((priority, new_state))
-    
+    print 'no solution'
+    return
 
 if __name__ == '__main__':
     
