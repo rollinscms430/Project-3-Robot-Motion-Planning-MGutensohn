@@ -15,6 +15,37 @@ class State(object):
         self.total_moves = 0
         
     #--- Fill in the rest of the class...
+    def manhattan_distance(self):
+        return abs(self.position[0] - self.goal[0]) + abs(self.position[1] + self.goal[1])
+    
+    def move(self, direction):
+        
+        new_row = self.position[0]
+        new_col = self.position[1]
+        
+        if direction is 'up':
+            new_row -= 1
+        if direction is 'down':
+            new_row += 1
+        if direction is 'left':
+            new_col -= 1
+        if direction is 'right':
+            new_col += 1
+        
+        if self.grid[new_row][new_col] is 1:
+            return None
+            
+        new_grid = deepcopy(self.grid)
+        new_state = State((new_row,new_col), self.goal, new_grid)
+        new_state.grid[new_row][new_col] = '*'
+        new_state.total_moves = self.total_moves + 1
+        
+        return new_state
+        
+    def done(self):
+        if self.position == self.goal:
+            return True
+        return False
         
 
 def create_grid():
@@ -70,6 +101,14 @@ def print_grid(grid):
 
     return 
 
+def previously_visited(state, visited):
+    key = state.position
+
+    if key in visited:
+        return True
+    else:
+        visited[key] = True
+        return False
 
 def main():
     
@@ -95,6 +134,32 @@ def main():
     
     #--- Fill in the rest of the search...
     
+    visited = {}
+    
+    while not queue.empty():
+        
+        
+        queue_item = queue.get()
+        state = queue_item[1]
+        #print 'here',queue_item[0]
+        
+        #print_grid(state.grid)
+
+        if state.done():
+            print_grid(state.grid)
+            return
+        
+        for direction in ['up', 'down', 'left', 'right']:
+            new_state = state.move(direction)
+            
+            if new_state is None:
+                continue
+            priority = new_state.total_moves + new_state.manhattan_distance()
+            
+            if previously_visited(new_state, visited):
+                continue
+            queue.put((priority, new_state))
+    
 
 if __name__ == '__main__':
     
@@ -110,7 +175,7 @@ if __name__ == '__main__':
     
     for trial in range(5):
         print '\n\n-----Easy trial ' + str(trial + 1) + '-----'
-        main()
+        ##main()
         
     #--- Uncomment the following sets of trials when you're ready
         
@@ -121,7 +186,7 @@ if __name__ == '__main__':
     
     for trial in range(5):
         print '\n\n-----Harder trial ' + str(trial + 1) + '-----'
-        ###main()
+        ##main()
         
     #--- INSANE mode
     num_rows = 20
@@ -130,4 +195,4 @@ if __name__ == '__main__':
     
     for trial in range(5):
         print '\n\n-----INSANE trial ' + str(trial + 1) + '-----'
-        ###main()
+        main()
