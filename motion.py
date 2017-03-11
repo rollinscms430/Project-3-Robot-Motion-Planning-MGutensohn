@@ -145,10 +145,12 @@ def main():
 
         if state.done():
             print_grid(state.grid)
+            print state.total_moves
             return
         
-        for direction in ['up', 'down', 'left', 'right']:
+        for direction in ['up','down', 'right', 'left']:
             new_state = state.move(direction)
+            
             
             if new_state is None:
                 continue
@@ -174,7 +176,7 @@ if __name__ == '__main__':
     
     for trial in range(5):
         print '\n\n-----Easy trial ' + str(trial + 1) + '-----'
-        ##main()
+        main()
         
     #--- Uncomment the following sets of trials when you're ready
         
@@ -185,7 +187,7 @@ if __name__ == '__main__':
     
     for trial in range(5):
         print '\n\n-----Harder trial ' + str(trial + 1) + '-----'
-        ##main()
+        main()
         
     #--- INSANE mode
     num_rows = 20
